@@ -40,28 +40,32 @@ public class EchoClient {
 			final Socket echoSocket = new Socket(args[0],new Integer(args[1]).intValue());
 
 			JFrame frame = new JFrame("Chat");
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			Container containerPseudo = new Container();
 			
 			JTextField pseudo = new JTextField(20);
 			JButton valider = new JButton("Valider");
 			
-			
-			
+		
 			JTextField message = new JTextField(50);
 			JTextArea chat = new JTextArea(16,50);
 			JButton deconnexion = new JButton("Se déconnecter");
 			chat.setEditable(false);
+			chat.setLineWrap(true);
 			
-			System.out.println(EchoServerMultiThreaded.getHistorique());
-			
-			/*for(String s : EchoServerMultiThreaded.getHistorique()) {
-				chat.append(s);
-				chat.append("\r\n");
-			}*/
 
 			final ListeningThread lt = new ListeningThread(echoSocket, chat);
 			final WritingThread wt = new WritingThread(echoSocket, message);
+			
+			frame.addWindowListener(new java.awt.event.WindowAdapter() {
+			    @Override
+			    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+						wt.setRunning(false);
+						lt.setRunning(false);
+						frame.setVisible(false);
+						frame.dispose();
+				}
+			});
 			
 			deconnexion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -74,7 +78,6 @@ public class EchoClient {
 					}
 				}
 			});
-			
 			
 			frame.getContentPane().add(message, BorderLayout.SOUTH);
 			frame.getContentPane().add(new JScrollPane(chat), BorderLayout.CENTER);
