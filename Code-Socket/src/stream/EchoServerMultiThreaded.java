@@ -50,7 +50,7 @@ public class EchoServerMultiThreaded  {
 		}
 	}
 	
-	public synchronized static void sendAll(String message) {
+	public synchronized static void sendAll(String message) { //appel = 0
 		//System.out.println("sendAll" + outStreams.size());
 		for(PrintStream out : outStreams) {
 			out.println(message);
@@ -58,7 +58,7 @@ public class EchoServerMultiThreaded  {
 		
 	}
 	
-	public synchronized static void sendAllHistorique(String message) {
+	public synchronized static void sendAllHistorique(String message) { //appel = 1
 		historique.add(message);
 		for(PrintStream out : outStreams) {
 			out.println(message);
@@ -66,7 +66,7 @@ public class EchoServerMultiThreaded  {
 		
 	}
 	
-	public synchronized static void sendAllHistoriquePersistent(String message) {
+	public synchronized static void sendAllHistoriquePersistent(String message) { //appel = 2
 		try {
 			writer.write(message);
 			writer.write("\r\n");
