@@ -36,6 +36,7 @@ public class ListeningThread extends Thread {
 					new InputStreamReader(client.getInputStream()));
 			
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -44,8 +45,10 @@ public class ListeningThread extends Thread {
 			try {
 				line = socIn.readLine();
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			//System.out.println("echo : " + line);
 			jta.append(line);
 			jta.append("\r\n");
 		}

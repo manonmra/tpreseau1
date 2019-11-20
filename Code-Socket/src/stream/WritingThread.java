@@ -26,6 +26,8 @@ public class WritingThread extends Thread {
 	}
 
 	public void run() {
+
+
 		BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			final PrintStream socOut = new PrintStream(client.getOutputStream());
@@ -42,6 +44,7 @@ public class WritingThread extends Thread {
 				try {
 					line=stdIn.readLine();
 				} catch (IOException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				if (line.equals(".")) break;
@@ -49,6 +52,7 @@ public class WritingThread extends Thread {
 			}
 
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

@@ -10,13 +10,14 @@ package stream;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class EchoServerMultiThreaded  {
 
 	public static ArrayList<String> historique = new ArrayList<String>();
 	public static ArrayList<PrintStream> outStreams = new ArrayList<PrintStream>();
+	public static HashSet<String> pseudos = new HashSet<String>();
 	public static FileWriter writer;
-	public static int appel = 2; //0 : sans historique, 1: historique non persistent, 2: historique persistent
 	/**
 	 * main method
 	 * @param EchoServer port
@@ -51,32 +52,20 @@ public class EchoServerMultiThreaded  {
 	}
 	
 	public synchronized static void sendAll(String message) {
-		//System.out.println("sendAll" + outStreams.size());
-		for(PrintStream out : outStreams) {
-			out.println(message);
-		}
-		
-	}
-	
-	public synchronized static void sendAllHistorique(String message) {
-		historique.add(message);
-		for(PrintStream out : outStreams) {
-			out.println(message);
-		}
-		
-	}
-	
-	public synchronized static void sendAllHistoriquePersistent(String message) {
+		System.out.println("sendAll" + outStreams.size());
+		//historique.add(message);
 		try {
 			writer.write(message);
 			writer.write("\r\n");
 			writer.flush();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		for(PrintStream out : outStreams) {
 			out.println(message);
 		}
+		
 	}
 	
 	public static ArrayList<String> getHistorique(){
