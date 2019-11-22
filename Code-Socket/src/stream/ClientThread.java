@@ -31,7 +31,7 @@ extends Thread {
 					new InputStreamReader(clientSocket.getInputStream()));    
 			PrintStream socOut = new PrintStream(clientSocket.getOutputStream());
 			EchoServerMultiThreaded.outStreams.add(socOut);
-
+ 
 			boolean pseudoAccepte = false;
 
 			while (!pseudoAccepte) {
@@ -47,8 +47,8 @@ extends Thread {
 						EchoServerMultiThreaded.pseudos.add(pseudo);
 						pseudoAccepte = true;
 
-						String bienvenue = ("#WELCOME#"+pseudo + " à rejoint le groupe");
-						EchoServerMultiThreaded.welcome(bienvenue);
+						/*String bienvenue = ("#WELCOME#"+pseudo + " à rejoint le groupe");
+						EchoServerMultiThreaded.welcome(bienvenue);*/
 
 
 					} else {
@@ -66,7 +66,7 @@ extends Thread {
 			case 1:
 				for(String s : EchoServerMultiThreaded.historique) {
 					socOut.println(s);
-				} 
+				}
 				break;
 			case 2:
 				File file = new File("historique.txt");
@@ -81,6 +81,7 @@ extends Thread {
 
 
 			while (true) {
+				
 				String line = socIn.readLine();
 				System.out.println("Message recu du clientThread " + this + " : " + line );
 				String message = (pseudo+ " : " + line);

@@ -45,20 +45,18 @@ public class ListeningThread extends Thread {
 			try {
 				line = socIn.readLine();
 				System.out.println(line);
-
-				if(line.startsWith("#WELCOME#") && line!=null){
-					jta.append(line.substring(9));
-					jta.append("\r\n");
-				}
-				else {
-					jta.append(line);
-					jta.append("\r\n");
-				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
+			/*if(line.startsWith("#WELCOME#") && line!=null){
+				jta.append(line.substring(9));
+				jta.append("\r\n");
+			}
+			else {*/
+			jta.append(line);
+			jta.append("\r\n");
 		}
 	}
 }

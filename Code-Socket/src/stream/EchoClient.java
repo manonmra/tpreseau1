@@ -149,7 +149,6 @@ public class EchoClient {
 
 		historique.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				switch (EchoServerMultiThreaded.appel) {
 				case 2:
 					PrintWriter pw = null;

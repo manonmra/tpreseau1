@@ -18,7 +18,7 @@ public class EchoServerMultiThreaded  {
 	public static ArrayList<PrintStream> outStreams = new ArrayList<PrintStream>();
 	public static HashSet<String> pseudos = new HashSet<String>();
 	public static FileWriter writer;
-	public static int appel = 2;
+	public static int appel = 1;
 	/**
 	 * main method
 	 * @param EchoServer port

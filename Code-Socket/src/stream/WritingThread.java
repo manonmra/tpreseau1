@@ -26,8 +26,6 @@ public class WritingThread extends Thread {
 	}
 
 	public void run() {
-
-
 		BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			final PrintStream socOut = new PrintStream(client.getOutputStream());
