@@ -18,6 +18,7 @@ public class EchoServerMultiThreaded  {
 	public static ArrayList<PrintStream> outStreams = new ArrayList<PrintStream>();
 	public static HashSet<String> pseudos = new HashSet<String>();
 	public static FileWriter writer;
+	public static int appel = 2;
 	/**
 	 * main method
 	 * @param EchoServer port
@@ -49,6 +50,14 @@ public class EchoServerMultiThreaded  {
 		} catch (Exception e) {
 			System.err.println("Error in EchoServer:" + e);
 		}
+	}
+	
+	public synchronized static void welcome(String message) { //appel = 0
+		//System.out.println("sendAll" + outStreams.size());
+		for(PrintStream out : outStreams) {
+			out.println(message);
+		}
+		
 	}
 	
 	public synchronized static void sendAll(String message) { //appel = 0

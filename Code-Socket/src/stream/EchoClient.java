@@ -46,17 +46,30 @@ public class EchoClient {
 			boolean pseudoAccepte = false;
 
 
-			JFrame frame = new JFrame("Chat");
+			JFrame frame = new JFrame("Pseudo");
 			Container containerPseudo = new Container();
 			JTextField pseudo = new JTextField(20);
+			JTextField info = new JTextField("Choissisez un pseudo");
+			info.setEditable(false);
+			info.setHorizontalAlignment(JTextField.CENTER);
 			JButton valider = new JButton("Valider");
 
 			
-			containerPseudo.setLayout(new BoxLayout(containerPseudo, BoxLayout.X_AXIS));
-			containerPseudo.add(pseudo);
-			containerPseudo.add(valider);
+	
+			containerPseudo.setLayout(new BorderLayout());
+			
+			JPanel subPanel = new JPanel();
+			subPanel.add(pseudo);
+			subPanel.add(valider);
+
+			
+			containerPseudo.add(subPanel, BorderLayout.CENTER);
+			containerPseudo.add(info, BorderLayout.NORTH);
 			
 			frame.setContentPane(containerPseudo);
+			
+			frame.pack();			
+			frame.setVisible(true);
 			
 			valider.addActionListener(new ActionListener() {
 
@@ -72,6 +85,8 @@ public class EchoClient {
 							if(line.contains("PSEUDOOK")) {
 								System.out.println("pseudo ok client");
 								accepterPseudo(pseudo.getText(), echoSocket);
+								frame.setVisible(false);
+								frame.dispose();
 							}
 							else {
 								valider.setEnabled(true);
@@ -86,8 +101,7 @@ public class EchoClient {
 				}
 				
 			});	
-			frame.pack();			
-			frame.setVisible(true);
+			
 		} catch (UnknownHostException e) {
 			System.err.println("Don't know about host:" + args[0]);
 			System.exit(1);
