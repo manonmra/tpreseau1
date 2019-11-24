@@ -44,7 +44,6 @@ public class ListeningThread extends Thread {
 			String line = null;
 			try {
 				line = socIn.readLine();
-				System.out.println(line);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

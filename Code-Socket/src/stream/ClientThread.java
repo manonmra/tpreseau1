@@ -81,7 +81,7 @@ extends Thread {
 
 
 			while (true) {
-				
+
 				String line = socIn.readLine();
 				System.out.println("Message recu du clientThread " + this + " : " + line );
 				String message = (pseudo+ " : " + line);
