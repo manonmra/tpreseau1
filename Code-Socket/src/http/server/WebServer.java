@@ -92,6 +92,12 @@ public class WebServer{
 						sendPage(out, fileName.substring(1)); //Le substring permet de faire péta le /
 						out.flush();
 					}
+					else {
+						out.println("HTTP/1.0 200 OK");
+						out.println("Content-Type: text/html");
+						out.println("Server: Bot");
+						out.flush();
+					}
 					break;
 
 				case "POST" :
@@ -99,14 +105,36 @@ public class WebServer{
 					out.println("Content-Type: text/html");
 					out.println("");
 					
-					BufferedReader rd = new BufferedReader(new InputStreamReader(remote.getInputStream()));
-				    String line;
-				    while ((line = rd.readLine()) != null) {
+					/*String line;
+				    while ((line = in.readLine()) != null) {
 				      System.out.println(line);
-				    }
+				    }*/
+				    
+					//*****************************************Traitement du commentaire
+				    int cL = 0;
+                    String content = "";
+                    while((content = in.readLine()) != null){
+                        if (content.equals("")) break;
+                        if (content.contains("Content-Length")){
+                            cL = Integer.parseInt(content.split(": ")[1]);
+                        }
+                    }
+                    char[]  buffer = new char[cL];
+                    String  postData = "";
+                    in.read(buffer, 0, cL);
+                    postData = new String(buffer, 0, buffer.length);
+                    String comment = postData.split("=")[1];
+                    System.out.println(comment);
+                    //******************************
+                    
+                    out.println("HTTP/1.0 200 OK");
+					out.println("Content-Type: text/html");
+					out.println("");
+
+					sendPage(out, "index.html"); //Le substring permet de faire péta le /
+					out.flush();
 					break;
 				}
-
 				remote.close();
 			} catch (Exception e) {
 				System.out.println("Error: " + e);
