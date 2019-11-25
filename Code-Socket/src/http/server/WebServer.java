@@ -41,7 +41,7 @@ public class WebServer{
 	protected void start() {
 		ServerSocket s;
 
-		System.out.println("Webserver starting up on port 80");
+		System.out.println("Webserver starting up on port 3000");
 		System.out.println("(press ctrl-c to exit)");
 		try {
 			// create the main server socket
@@ -81,7 +81,7 @@ public class WebServer{
 						fillHeader(out);
 
 						// Send the HTML page
-						out.println("<H1>Welcome to the Ultra Mini-WebServer</H1>");
+						sendPage(out, "index.html");
 						out.flush();
 					}
 					else if(!fileName.contains("/favicon") && fileName.endsWith(".html")){
@@ -101,7 +101,14 @@ public class WebServer{
 						out.flush();
 						displayImage(remote, out, fileName.substring(1));
 					}
-					else {
+					else if (fileName.endsWith(".css")) {
+						out.println("HTTP/1.0 200 OK");
+						out.println("Content-Type: text/css");
+						out.println("Server: Bot");
+						out.println("");
+						out.flush();
+						sendPage(out, fileName);
+					} else {
 						fillHeader(out);
 						out.flush();
 					}
@@ -127,10 +134,10 @@ public class WebServer{
 					System.out.println(comment);
 					//******************************
 
-
+					comment = comment.replace('+', ' ');
 					out.println("Commentaire envoyé :");
 					out.println("<p>"+comment+"</p>");
-					out.println("<button href=\"index.html\">Retournez à la page d'accueil</button>");
+					out.println("<button href=\"resources/index.html\">Retournez à la page d'accueil</button>");
 					out.flush();
 					break;
 				}
@@ -149,7 +156,8 @@ public class WebServer{
 	 */
 	public void sendPage(PrintWriter out, String fileName) throws IOException {
 		try {
-			File file = new File(fileName);
+			File file = new File("resources/"+fileName);
+			System.out.println(file.getPath());
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			String st;
 			while((st = br.readLine()) != null) {
@@ -164,7 +172,7 @@ public class WebServer{
 	public void displayImage(Socket remote, PrintWriter out,String filename) {
 		BufferedImage img = null;
 		try {
-			img=ImageIO.read(new File(filename));
+			img=ImageIO.read(new File("resources/"+filename));
 			ImageIO.write(img,"jpg", remote.getOutputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -173,9 +181,11 @@ public class WebServer{
 
 	public void fillHeader(PrintWriter out) {
 		out.println("Content-Type: text/html");
-		out.println("<meta charset=\"UTF-8\">");
 		out.println("Server: Bot");
 		out.println("");
+		out.println("<meta charset=\"UTF-8\">");
+		out.println("<link rel=\"stylesheet\" href=\"style.css\">");
+
 	}
 
 	/**
