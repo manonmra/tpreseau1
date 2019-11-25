@@ -2,6 +2,7 @@
 
 package http.server;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,6 +14,8 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import javax.imageio.ImageIO;
 
 
 
@@ -29,7 +32,7 @@ import java.util.StringTokenizer;
 
 
 public class WebServer{
-	
+
 	//List<Pair<String, Integer>> list = new ArrayList<Pair<String, Integer>>();
 
 	/**
@@ -73,65 +76,61 @@ public class WebServer{
 					String fileName = st.nextToken();
 					if(fileName.equals("/")) {
 						// Send the headers
+
 						out.println("HTTP/1.0 200 OK");
-						out.println("Content-Type: text/html");
-						out.println("Server: Bot");
-						// this blank line signals the end of the headers
-						out.println("");
+						fillHeader(out);
 
 						// Send the HTML page
 						out.println("<H1>Welcome to the Ultra Mini-WebServer</H1>");
 						out.flush();
 					}
-					else if(!fileName.contains("/favicon")){
+					else if(!fileName.contains("/favicon") && fileName.endsWith(".html")){
 						//Headers
 						out.println("HTTP/1.0 200 OK");
-						out.println("Content-Type: text/html");
-						out.println("");
-
-						sendPage(out, fileName.substring(1)); //Le substring permet de faire péta le /
+						fillHeader(out);
+			
+						sendPage(out, fileName.substring(1));
 						out.flush();
 					}
-					else {
+					else if(!fileName.contains("/favicon") && (fileName.endsWith(".jpg")|| fileName.endsWith(".png")|| fileName.endsWith(".gif"))){
+						//Headers
 						out.println("HTTP/1.0 200 OK");
-						out.println("Content-Type: text/html");
+						out.println("Content-Type: image/jpeg");
 						out.println("Server: Bot");
+						out.println("");		
+						out.flush();
+						displayImage(remote, out, fileName.substring(1));
+					}
+					else {
+						fillHeader(out);
 						out.flush();
 					}
 					break;
 
 				case "POST" :
 					out.println("HTTP/1.0 200 OK");
-					out.println("Content-Type: text/html");
-					out.println("");
-					
-					/*String line;
-				    while ((line = in.readLine()) != null) {
-				      System.out.println(line);
-				    }*/
-				    
+					fillHeader(out);
 					//*****************************************Traitement du commentaire
-				    int cL = 0;
-                    String content = "";
-                    while((content = in.readLine()) != null){
-                        if (content.equals("")) break;
-                        if (content.contains("Content-Length")){
-                            cL = Integer.parseInt(content.split(": ")[1]);
-                        }
-                    }
-                    char[]  buffer = new char[cL];
-                    String  postData = "";
-                    in.read(buffer, 0, cL);
-                    postData = new String(buffer, 0, buffer.length);
-                    String comment = postData.split("=")[1];
-                    System.out.println(comment);
-                    //******************************
-                    
-                    out.println("HTTP/1.0 200 OK");
-					out.println("Content-Type: text/html");
-					out.println("");
+					int cL = 0;
+					String content = "";
+					while((content = in.readLine()) != null){
+						if (content.equals("")) break;
+						if (content.contains("Content-Length")){
+							cL = Integer.parseInt(content.split(": ")[1]);
+						}
+					}
+					char[]  buffer = new char[cL];
+					String  postData = "";
+					in.read(buffer, 0, cL);
+					postData = new String(buffer, 0, buffer.length);
+					String comment = postData.split("=")[1];
+					System.out.println(comment);
+					//******************************
 
-					sendPage(out, "index.html"); //Le substring permet de faire péta le /
+
+					out.println("Commentaire envoyé :");
+					out.println("<p>"+comment+"</p>");
+					out.println("<button href=\"index.html\">Retournez à la page d'accueil</button>");
 					out.flush();
 					break;
 				}
@@ -160,6 +159,23 @@ public class WebServer{
 			e.printStackTrace();
 		}
 
+	}
+	
+	public void displayImage(Socket remote, PrintWriter out,String filename) {
+		BufferedImage img = null;
+		try {
+			img=ImageIO.read(new File(filename));
+			ImageIO.write(img,"jpg", remote.getOutputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void fillHeader(PrintWriter out) {
+		out.println("Content-Type: text/html");
+		out.println("<meta charset=\"UTF-8\">");
+		out.println("Server: Bot");
+		out.println("");
 	}
 
 	/**
