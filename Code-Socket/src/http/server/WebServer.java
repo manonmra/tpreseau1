@@ -177,6 +177,7 @@ public class WebServer{
 		File file = new File("resources/"+fileName);
 		if(file.exists()) {
 			out.println("HTTP/1.0 200 OK");
+			out.println("Content-Type: text/html");
 			fillHeader(out);
 			try {
 				System.out.println(file.getPath());
@@ -209,6 +210,7 @@ public class WebServer{
 		BufferedImage img = null;
 		File file = new File("resources/"+filename);
 		if(file.exists()) {
+			
 			try {
 				img=ImageIO.read(new File("resources/"+filename));
 				ImageIO.write(img,"jpg", remote.getOutputStream());
