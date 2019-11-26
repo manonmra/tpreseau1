@@ -3,8 +3,11 @@
 package http.server;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -61,6 +64,7 @@ public class WebServer{
 
 				System.out.println("Connection, sending data.");
 				BufferedReader in = new BufferedReader(new InputStreamReader(remote.getInputStream()));
+				BufferedOutputStream audioStream = new BufferedOutputStream(remote.getOutputStream());
 				PrintWriter out = new PrintWriter(remote.getOutputStream());
 
 				//Lire le type de requête qui est envoyé
@@ -99,7 +103,7 @@ public class WebServer{
 						out.println("Server: Bot");
 						out.println("");		
 						out.flush();
-						displayImage(remote, out, fileName.substring(1));
+						displayImage(remote, out, fileName);
 					}
 					else if (fileName.endsWith(".css")) {
 						out.println("HTTP/1.0 200 OK");
@@ -107,8 +111,23 @@ public class WebServer{
 						out.println("Server: Bot");
 						out.println("");
 						out.flush();
-						sendPage(out, fileName);
-					} else {
+						sendPage(out, fileName.substring(1));
+					}else if (fileName.endsWith(".mp3")) {
+						out.println("HTTP/1.0 200 OK");
+						out.println("Content-type: audio/mpeg");
+						out.println("Server: Bot");
+						out.println("");
+						out.flush();
+						playData(audioStream,fileName.substring(1));
+					} else if (fileName.endsWith(".mp4")) {
+						out.println("HTTP/1.0 200 OK");
+						out.println("Content-type: video/mp4");
+						out.println("Server: Bot");
+						out.println("");
+						out.flush();
+						playData(audioStream,fileName.substring(1));
+					}
+					else {
 						fillHeader(out);
 						out.flush();
 					}
@@ -169,6 +188,12 @@ public class WebServer{
 
 	}
 	
+	/**
+	 * Sert à afficher une image à l'écran depuis un fichier
+	 * @param remote
+	 * @param out
+	 * @param filename
+	 */
 	public void displayImage(Socket remote, PrintWriter out,String filename) {
 		BufferedImage img = null;
 		try {
@@ -178,7 +203,27 @@ public class WebServer{
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Sert à jouer de la musique depuis un fichier
+	 * @param out
+	 * @param filename
+	 * @throws IOException
+	 */
+	public void playData(BufferedOutputStream out, String filename) throws IOException {
+		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(filename));
+		byte[] buffer = new byte[256];
+		int bytes;
+		while((bytes = bis.read(buffer)) != -1) {
+			out.write(buffer, 0, bytes);
+		}
+		bis.close();
+	}
 
+	/**
+	 * Sert à remplir les entêtes du fichier
+	 * @param out
+	 */
 	public void fillHeader(PrintWriter out) {
 		out.println("Content-Type: text/html");
 		out.println("Server: Bot");
