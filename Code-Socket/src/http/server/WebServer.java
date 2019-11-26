@@ -83,6 +83,7 @@ public class WebServer{
 
 						out.println("HTTP/1.0 200 OK");
 						//out.println("Link: <magic.css>;rel=stylesheet");
+						out.println("Content-Type: text/html");
 						fillHeader(out);
 
 						// Send the HTML page
@@ -91,9 +92,7 @@ public class WebServer{
 					}
 					else if(!fileName.contains("/favicon") && fileName.endsWith(".html")){
 						//Headers
-						out.println("HTTP/1.0 200 OK");
-						fillHeader(out);
-			
+
 						sendPage(out, fileName.substring(1));
 						out.flush();
 					}
@@ -135,7 +134,7 @@ public class WebServer{
 					break;
 
 				case "POST" :
-					out.println("HTTP/1.0 200 OK");
+					out.println("HTTP/1.0 201 CREATED");
 					fillHeader(out);
 					//*****************************************Traitement du commentaire
 					int cL = 0;
@@ -175,22 +174,31 @@ public class WebServer{
 	 * @throws IOException
 	 */
 	public void sendPage(PrintWriter out, String fileName) throws IOException {
-		try {
-			File file = new File("resources/"+fileName);
-			System.out.println(file.getPath());
-			BufferedReader br = new BufferedReader(new FileReader(file));
-			String st;
-			while((st = br.readLine()) != null) {
-				System.out.println("passé par là");
-				System.out.println(st);
-				out.println(st);
+		File file = new File("resources/"+fileName);
+		if(file.exists()) {
+			out.println("HTTP/1.0 200 OK");
+			fillHeader(out);
+			try {
+				System.out.println(file.getPath());
+				BufferedReader br = new BufferedReader(new FileReader(file));
+				String st;
+				while((st = br.readLine()) != null) {
+					System.out.println("passé par là");
+					System.out.println(st);
+					out.println(st);
+				}
+			} catch (FileNotFoundException e) {
+				out.println("HTTP/1.0 500 INTERNAL ERROR");
+				e.printStackTrace();
 			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		}
+		else {
+			out.println("HTTP/1.0 404 FILE NOT FOUND");
+			fillHeader(out);
 		}
 
 	}
-	
+
 	/**
 	 * Sert à afficher une image à l'écran depuis un fichier
 	 * @param remote
@@ -199,14 +207,22 @@ public class WebServer{
 	 */
 	public void displayImage(Socket remote, PrintWriter out,String filename) {
 		BufferedImage img = null;
-		try {
-			img=ImageIO.read(new File("resources/"+filename));
-			ImageIO.write(img,"jpg", remote.getOutputStream());
-		} catch (IOException e) {
-			e.printStackTrace();
+		File file = new File("resources/"+filename);
+		if(file.exists()) {
+			try {
+				img=ImageIO.read(new File("resources/"+filename));
+				ImageIO.write(img,"jpg", remote.getOutputStream());
+			} catch (IOException e) {
+				out.println("HTTP/1.0 500 INTERNAL ERROR");
+				e.printStackTrace();
+			}
 		}
+		else {
+			System.out.println("NOT FOUND");
+		}
+
 	}
-	
+
 	/**
 	 * Sert à jouer de la musique depuis un fichier
 	 * @param out
@@ -228,7 +244,7 @@ public class WebServer{
 	 * @param out
 	 */
 	public void fillHeader(PrintWriter out) {
-		out.println("Content-Type: text/html");
+		//out.println("Content-Type: text/html");
 		out.println("Server: Bot");
 		out.println("");
 		out.println("<meta charset=\"UTF-8\">");
