@@ -82,6 +82,7 @@ public class WebServer{
 						// Send the headers
 
 						out.println("HTTP/1.0 200 OK");
+						//out.println("Link: <magic.css>;rel=stylesheet");
 						fillHeader(out);
 
 						// Send the HTML page
@@ -105,14 +106,14 @@ public class WebServer{
 						out.flush();
 						displayImage(remote, out, fileName);
 					}
-					else if (fileName.endsWith(".css")) {
+					/*else if (fileName.endsWith(".css")) {
 						out.println("HTTP/1.0 200 OK");
 						out.println("Content-Type: text/css");
 						out.println("Server: Bot");
 						out.println("");
 						out.flush();
-						sendPage(out, fileName.substring(1));
-					}else if (fileName.endsWith(".mp3")) {
+						playData(audioStream, fileName.substring(1));
+					}*/else if (fileName.endsWith(".mp3")) {
 						out.println("HTTP/1.0 200 OK");
 						out.println("Content-type: audio/mpeg");
 						out.println("Server: Bot");
@@ -180,6 +181,8 @@ public class WebServer{
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			String st;
 			while((st = br.readLine()) != null) {
+				System.out.println("passé par là");
+				System.out.println(st);
 				out.println(st);
 			}
 		} catch (FileNotFoundException e) {
@@ -229,8 +232,6 @@ public class WebServer{
 		out.println("Server: Bot");
 		out.println("");
 		out.println("<meta charset=\"UTF-8\">");
-		out.println("<link rel=\"stylesheet\" href=\"style.css\">");
-
 	}
 
 	/**
