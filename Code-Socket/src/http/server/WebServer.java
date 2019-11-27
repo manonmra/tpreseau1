@@ -60,7 +60,6 @@ public class WebServer{
 				// wait for a connection
 				Socket remote = s.accept();
 
-				// remote is now the connected socket
 
 				System.out.println("Connection, sending data.");
 				BufferedReader in = new BufferedReader(new InputStreamReader(remote.getInputStream()));
@@ -79,25 +78,14 @@ public class WebServer{
 				case "GET" : 
 					String fileName = st.nextToken();
 					if(fileName.equals("/")) {
-						// Send the headers
-
-						out.println("HTTP/1.0 200 OK");
-						//out.println("Link: <magic.css>;rel=stylesheet");
-						out.println("Content-Type: text/html");
-						fillHeader(out);
-
-						// Send the HTML page
 						sendPage(out, "index.html");
 						out.flush();
 					}
 					else if(!fileName.contains("/favicon") && fileName.endsWith(".html")){
-						//Headers
-
 						sendPage(out, fileName.substring(1));
 						out.flush();
 					}
 					else if(!fileName.contains("/favicon") && (fileName.endsWith(".jpg")|| fileName.endsWith(".png")|| fileName.endsWith(".gif"))){
-						//Headers
 						out.println("HTTP/1.0 200 OK");
 						out.println("Content-Type: image/jpeg");
 						out.println("Server: Bot");
@@ -177,7 +165,6 @@ public class WebServer{
 		File file = new File("resources/"+fileName);
 		if(file.exists()) {
 			out.println("HTTP/1.0 200 OK");
-			out.println("Content-Type: text/html");
 			fillHeader(out);
 			try {
 				System.out.println(file.getPath());
@@ -246,7 +233,7 @@ public class WebServer{
 	 * @param out
 	 */
 	public void fillHeader(PrintWriter out) {
-		//out.println("Content-Type: text/html");
+		out.println("Content-Type: text/html");
 		out.println("Server: Bot");
 		out.println("");
 		out.println("<meta charset=\"UTF-8\">");
