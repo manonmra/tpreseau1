@@ -195,7 +195,6 @@ public class WebServer{
 		BufferedImage img = null;
 		File file = new File("resources/"+filename);
 		if(file.exists()) {
-			
 			try {
 				img=ImageIO.read(new File("resources/"+filename));
 				ImageIO.write(img,"jpg", remote.getOutputStream());
@@ -217,7 +216,7 @@ public class WebServer{
 	 * @throws IOException
 	 */
 	public void playData(BufferedOutputStream out, String filename) throws IOException {
-		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(filename));
+		BufferedInputStream bis = new BufferedInputStream(new FileInputStream("resources/"+filename));
 		byte[] buffer = new byte[256];
 		int bytes;
 		while((bytes = bis.read(buffer)) != -1) {
