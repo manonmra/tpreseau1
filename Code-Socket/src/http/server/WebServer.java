@@ -171,8 +171,6 @@ public class WebServer{
 				BufferedReader br = new BufferedReader(new FileReader(file));
 				String st;
 				while((st = br.readLine()) != null) {
-					System.out.println("passé par là");
-					System.out.println(st);
 					out.println(st);
 				}
 			} catch (FileNotFoundException e) {
@@ -237,6 +235,7 @@ public class WebServer{
 		out.println("Server: Bot");
 		out.println("");
 		out.println("<meta charset=\"UTF-8\">");
+		out.println("<meta http-equiv=\"Content-type\" content=\"text/html; charset=UTF-8\">");
 	}
 
 	/**
