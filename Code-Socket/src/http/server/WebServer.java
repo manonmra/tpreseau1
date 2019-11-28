@@ -171,8 +171,6 @@ public class WebServer{
 				BufferedReader br = new BufferedReader(new FileReader(file));
 				String st;
 				while((st = br.readLine()) != null) {
-					System.out.println("passé par là");
-					System.out.println(st);
 					out.println(st);
 				}
 			} catch (FileNotFoundException e) {
@@ -197,7 +195,6 @@ public class WebServer{
 		BufferedImage img = null;
 		File file = new File("resources/"+filename);
 		if(file.exists()) {
-			
 			try {
 				img=ImageIO.read(new File("resources/"+filename));
 				ImageIO.write(img,"jpg", remote.getOutputStream());
@@ -219,7 +216,7 @@ public class WebServer{
 	 * @throws IOException
 	 */
 	public void playData(BufferedOutputStream out, String filename) throws IOException {
-		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(filename));
+		BufferedInputStream bis = new BufferedInputStream(new FileInputStream("resources/"+filename));
 		byte[] buffer = new byte[256];
 		int bytes;
 		while((bytes = bis.read(buffer)) != -1) {
@@ -237,6 +234,7 @@ public class WebServer{
 		out.println("Server: Bot");
 		out.println("");
 		out.println("<meta charset=\"UTF-8\">");
+		out.println("<meta http-equiv=\"Content-type\" content=\"text/html; charset=UTF-8\">");
 	}
 
 	/**
