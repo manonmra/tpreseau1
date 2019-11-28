@@ -18,11 +18,9 @@ public class EchoServerMultiThreaded  {
 	public static ArrayList<PrintStream> outStreams = new ArrayList<PrintStream>();
 	public static HashSet<String> pseudos = new HashSet<String>();
 	public static FileWriter writer;
-	public static int appel = 1;
+	public static int appel = 2; //0 : pas d'historique 1: historique non persistent 2: historique persistent
 	/**
 	 * main method
-	 * @param EchoServer port
-	 * 
 	 **/
 	public static void main(String args[]){ 
 		ServerSocket listenSocket;

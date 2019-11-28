@@ -81,7 +81,7 @@ public class WebServer{
 						sendPage(out, "index.html");
 						out.flush();
 					}
-					else if(!fileName.contains("/favicon") && fileName.endsWith(".html")){
+					else if(fileName.endsWith(".html")){
 						sendPage(out, fileName.substring(1));
 						out.flush();
 					}

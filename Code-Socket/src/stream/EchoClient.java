@@ -6,8 +6,7 @@
  */
 package stream;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -53,8 +52,9 @@ public class EchoClient {
 			info.setEditable(false);
 			info.setHorizontalAlignment(JTextField.CENTER);
 			JButton valider = new JButton("Valider");
-
-			
+			JTextArea messageErreur = new JTextArea();
+			//messageErreur.setColumns(60);
+			messageErreur.setForeground(Color.RED);
 	
 			containerPseudo.setLayout(new BorderLayout());
 			
@@ -65,7 +65,8 @@ public class EchoClient {
 			
 			containerPseudo.add(subPanel, BorderLayout.CENTER);
 			containerPseudo.add(info, BorderLayout.NORTH);
-			
+			containerPseudo.add(messageErreur, BorderLayout.SOUTH);
+
 			frame.setContentPane(containerPseudo);
 			
 			frame.pack();			
@@ -91,6 +92,7 @@ public class EchoClient {
 							else {
 								valider.setEnabled(true);
 								pseudo.setText("");
+								messageErreur.setText("Pseudo non disponible.");
 							}
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
@@ -134,6 +136,8 @@ public class EchoClient {
 				frame.dispose();
 			}
 		});
+
+
 
 		deconnexion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

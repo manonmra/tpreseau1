@@ -19,14 +19,15 @@ public class WritingThread extends Thread {
 	AtomicBoolean running;
 	JTextField jtf;
 	
-	String uniqueID = UUID.randomUUID().toString();
+	String pseudo;
 
-	WritingThread(MulticastSocket s, InetAddress ga, int gp, JTextField jtf){
+	WritingThread(MulticastSocket s, InetAddress ga, int gp, JTextField jtf, String pseudo){
 		this.s = s;
 		this.groupAddress =  ga;
 		this.groupPort = gp;
 		this.running = new AtomicBoolean(true);
 		this.jtf = jtf;
+		this.pseudo = pseudo;
 	}
 
 	public boolean isRunning() {
@@ -41,7 +42,7 @@ public class WritingThread extends Thread {
 		jtf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String line = jtf.getText();
-				line = uniqueID.substring(0,8) + " : " + line;
+				line = pseudo + " : " + line;
 				DatagramPacket dp = new DatagramPacket(line.getBytes(), line.length(), groupAddress, groupPort);
 				try {
 					s.send(dp);
