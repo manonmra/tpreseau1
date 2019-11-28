@@ -144,7 +144,7 @@ public class WebServer{
 					comment = comment.replace('+', ' ');
 					out.println("Commentaire envoyé :");
 					out.println("<p>"+comment+"</p>");
-					out.println("<button href=\"resources/index.html\">Retournez à la page d'accueil</button>");
+					out.println("<a href=\"index.html\">Retournez à la page d'accueil</a>");
 					out.flush();
 					break;
 				}
@@ -181,6 +181,7 @@ public class WebServer{
 		else {
 			out.println("HTTP/1.0 404 FILE NOT FOUND");
 			fillHeader(out);
+			out.println("La page demandée n'existe pas (404 not found)");
 		}
 
 	}
@@ -204,6 +205,8 @@ public class WebServer{
 			}
 		}
 		else {
+			out.println("HTTP/1.0 404 FILE NOT FOUND");
+
 			System.out.println("NOT FOUND");
 		}
 
